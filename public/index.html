@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fitFuel — Fitness, Meals & Recipes</title>
+  <meta name="description" content="Track nutrition, manage your pantry, and get smart recipe suggestions." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            olive: { DEFAULT: '#4f6b3a', deep: '#2d3f22', soft: '#8fa87a', sage: '#dce6d2' },
+            terracotta: '#c24e2a',
+            ember: '#e07020',
+            sand: '#f3efe6',
+            ink: '#1c2418',
+            peach: '#f2b77a'
+          },
+          fontFamily: {
+            display: ['Outfit', 'sans-serif'],
+            sans: ['Figtree', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body class="antialiased">
+  <!-- Top Navigation -->
+  <header id="main-nav" class="sticky top-0 z-50 border-b border-white/10 bg-[#2d3f22] backdrop-blur-md hidden">
+    <div class="w-full px-6 py-8 flex items-center justify-between gap-4">
+      <a href="#home" class="flex items-center gap-2 group" data-nav="home">
+        <span class="w-14 h-14 rounded-full bg-white/15 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    width="30" height="30" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="white" 
+                    stroke-width="1.8" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round">
+                  <path d="M12 2C12 2 5 8 5 14a7 7 0 0 0 14 0c0-3.5-2-6-4-8 0 3-1.5 4-3 5 0-4-1-6-1-9z"/>
+                </svg>
+        </span>
+        <span class="font-display font-extrabold text-7xl tracking-tight">
+              <span class="text-white">fit</span><span class="text-[#C66A4A]">Fuel</span>
+        </span>
+      </a>
+
+      <nav class="nav-desktop flex items-center gap-8 text-2xl">
+        <a href="#pantry" class="nav-link !text-white" data-nav="pantry">Pantry</a>
+        <a href="#recipes" class="nav-link !text-white" data-nav="recipes">Recipes</a>
+        <a href="#foodlog" class="nav-link !text-white" data-nav="foodlog">Food Log</a>
+        <a href="#calculator" class="nav-link !text-white" data-nav="calculator">BMI / TDEE</a>
+        <a href="#progress" class="nav-link !text-white" data-nav="progress">Progress</a>
+        <a href="#profile" class="nav-link !text-white" data-nav="profile">Profile</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="avatar-btn" class="avatar-circle text-white text-2xl" title="Profile" data-nav="profile">U</button>
+        <button id="logout-btn" class="btn-ghost text-sm py-2 px-4 hidden sm:inline-flex text-white text-xl">Log out</button>
+        <button id="mobile-menu-btn" class="nav-mobile-btn btn-ghost p-2 text-white text-lg" aria-label="Menu">☰</button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="mobile-menu hidden flex-col gap-2 px-4 pb-4 border-t border-olive/10 bg-[#f7f4ee]">
+      <a href="#pantry" class="nav-link py-2" data-nav="pantry">Pantry</a>
+      <a href="#recipes" class="nav-link py-2" data-nav="recipes">Recipes</a>
+      <a href="#foodlog" class="nav-link py-2" data-nav="foodlog">Food Log</a>
+      <a href="#calculator" class="nav-link py-2" data-nav="calculator">BMI / TDEE</a>
+      <a href="#progress" class="nav-link py-2" data-nav="progress">Progress</a>
+      <a href="#profile" class="nav-link py-2" data-nav="profile">Profile</a>
+      <button id="logout-btn-mobile" class="btn-ghost text-left mt-2">Log out</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- ========== AUTH ========== -->
+    <section id="view-auth" class="view active">
+      <div class="fp-auth-shell">
+        <!-- Left: brand / marketing panel -->
+        <div class="fp-auth-left">
+          <div class="fp-auth-circle"></div>
+          <div class="relative z-10 max-w-md">
+            <div class="flex items-center gap-5 mb-10">
+              <span class="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    width="50" height="50" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="white" 
+                    stroke-width="1.8" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round">
+                  <path d="M12 2C12 2 5 8 5 14a7 7 0 0 0 14 0c0-3.5-2-6-4-8 0 3-1.5 4-3 5 0-4-1-6-1-9z"/>
+                </svg>
+              </span>
+              <span class="font-display font-extrabold text-9xl tracking-tight">
+                fit<span class="text-[#C66A4A]">Fuel</span>
+              </span>
+            </div>
+            
+            <h1 class="font-display text-4xl sm:text-4xl font-bold leading-[1.1] mb-5">
+              Your Personalized <span class="text-peach">Fitness Companion.</span>
+            </h1>
+            <p class="text-white/80 text-lg leading-relaxed mb-8">
+              Log meals, manage ingredients, and unlock smart recipe ideas from what's already in your kitchen.
+            </p>
+            <ul class="space-y-2 text-sm text-white/85 mb-14">
+              <li>✓ Pantry-powered recipe matching</li>
+              <li>✓ USDA-style calorie &amp; macro lookup</li>
+              <li>✓ BMI, TDEE &amp; workout guidance</li>
+            </ul>
+            <p class="flex items-center gap-2 text-lg text-white/70">
+              <span>🛡️</span> Your personal kitchen &amp; fitness space, kept simple.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: auth form -->
+        <div class="fp-auth-right">
+          <div class="w-full max-w-md">
+            <p id="auth-eyebrow" class="text-terracotta font-extrabold tracking-wide uppercase text-5xl mb-2">Welcome back!</p>
+            <h2 id="auth-heading" class="font-display text-2xl font-bold text-olive-deep mb-2">Good to see you.</h2>
+            <p id="auth-subtext" class="mb-6" style="color:var(--muted)">Pick up where your last good choice left off.</p>
+
+            <div class="flex gap-1 p-1 bg-white rounded-full shadow-sm mb-6">
+              <button type="button" id="tab-register" class="flex-1 py-2.5 rounded-full font-bold text-olive-deep transition">Create account</button>
+              <button type="button" id="tab-login" class="flex-1 py-2.5 rounded-full font-bold bg-olive-deep text-white transition">Sign in</button>
+            </div>
+
+            <div class="panel shadow-lg shadow-olive/5">
+              <form id="form-login" class="space-y-4">
+                <div>
+                  <label class="block text-lg font-bold mb-1">Email address</label>
+                  <input type="email" name="email" class="input-field" required placeholder="you@example.com" />
+                </div>
+                <div>
+                  <label class="block text-lg font-bold mb-1">Password</label>
+                  <div class="relative">
+                    <input type="password" name="password" id="login-password" class="input-field" style="padding-right:2.75rem;" required minlength="6" placeholder="At least 6 characters" />
+                    <button type="button" class="pw-toggle absolute right-3 top-1/2 -translate-y-1/2 text-sm" data-target="login-password" style="color:var(--muted)">👁️</button>
+                  </div>
+                </div>
+                <button type="submit" class="btn-accent w-full flex items-center justify-center gap-2">Sign in <span>→</span></button>
+              </form>
+
+              <form id="form-register" class="space-y-4 hidden">
+                <div>
+                  <label class="block text-lg font-bold mb-1">Username</label>
+                  <input type="text" name="username" class="input-field" required minlength="3" placeholder="yourname" />
+                </div>
+                <div>
+                  <label class="block text-lg font-bold mb-1">Email address</label>
+                  <input type="email" name="email" class="input-field" required placeholder="you@example.com" />
+                </div>
+                <div>
+                  <label class="block text-lg font-bold mb-1">Password</label>
+                  <div class="relative">
+                    <input type="password" name="password" id="register-password" class="input-field" style="padding-right:2.75rem;" required minlength="6" placeholder="At least 6 characters" />
+                    <button type="button" class="pw-toggle absolute right-3 top-1/2 -translate-y-1/2 text-sm" data-target="register-password" style="color:var(--muted)">👁️</button>
+                  </div>
+                </div>
+                <button type="submit" class="btn-accent w-full flex items-center justify-center gap-2">Create account <span>→</span></button>
+              </form>
+
+              <p class="text-xs text-center text-lg mt-4" style="color:var(--muted)">
+                Your data stays in your account — no feeds, no clutter, just your kitchen and your goals.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== HOME ========== -->
+    <section id="view-home" class="view">
+      <div class="mb-8">
+        <h2 class="font-display text-5xl font-bold text-olive-deep">Welcome back, <span id="home-username">friend</span></h2>
+        <p class="mt-1 text-lg" style="color:var(--muted)">Your smarter way to eat, move, and thrive.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="#pantry" data-nav="pantry" class="panel p-6 min-h-[220px] hover:border-olive/40 transition group">
+          <span class="text-3xl">🧺</span>
+          <h3 class="font-display font-extrabold text-2xl mt-3 group-hover:text-olive">Pantry</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Track ingredients you have on hand.</p>
+        </a>
+        <a href="#recipes" data-nav="recipes" class="panel hover:border-ember/40 transition group">
+          <span class="text-3xl">🍛</span>
+          <h3 class="font-display font-bold text-2xl mt-3 group-hover:text-ember">Smart Recipes</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Dishes matched to you.</p>
+        </a>
+        <a href="#foodlog" data-nav="foodlog" class="panel hover:border-terracotta/40 transition group">
+          <span class="text-3xl">📊</span>
+          <h3 class="font-display font-bold text-2xl mt-3 group-hover:text-terracotta">Food Log</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Calories and macros, logged simply.</p>
+        </a>
+        <a href="#calculator" data-nav="calculator" class="panel p-6 min-h-[220px] hover:border-olive/40 transition group">
+          <span class="text-3xl">💪</span>
+          <h3 class="font-display font-bold text-2xl mt-3">BMI &amp; TDEE</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Targets plus workout suggestions.</p>
+        </a>
+        <a href="#progress" data-nav="progress" class="panel hover:border-olive/40 transition group">
+          <span class="text-3xl">📈</span>
+          <h3 class="font-display font-bold text-2xl mt-3">Progress</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Weight history and weekly averages.</p>
+        </a>
+        <a href="#profile" data-nav="profile" class="panel hover:border-olive/40 transition group">
+          <span class="text-3xl">👤</span>
+          <h3 class="font-display font-bold text-2xl mt-3">Profile</h3>
+          <p class="text-md mt-1" style="color:var(--muted)">Goals, body metrics, preferences.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========== PROFILE ========== -->
+    <section id="view-profile" class="view">
+      <h2 class="font-display text-5xl font-bold text-olive-deep mb-6">Your Profile</h2>
+      <form id="form-profile" class="panel max-w-2xl space-y-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Username</label>
+            <input name="username" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Email</label>
+            <input name="email" class="input-field bg-olive-sage/40" readonly />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Age</label>
+            <input name="age" type="number" min="10" max="120" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Gender</label>
+            <select name="gender" class="input-field">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Height (cm)</label>
+            <input name="heightCm" type="number" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Weight (kg)</label>
+            <input name="weightKg" type="number" step="0.1" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Activity level</label>
+            <select name="activityLevel" class="input-field">
+              <option value="">Select…</option>
+              <option value="sedentary">Sedentary</option>
+              <option value="light">Light</option>
+              <option value="moderate">Moderate</option>
+              <option value="active">Active</option>
+              <option value="very_active">Very active</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Goal</label>
+            <select name="goal" class="input-field">
+              <option value="">Select…</option>
+              <option value="lose">Lose weight</option>
+              <option value="maintain">Maintain</option>
+              <option value="gain">Gain muscle</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Bio</label>
+          <textarea name="bio" rows="2" class="input-field" maxlength="300" placeholder="Optional short bio"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Save profile</button>
+      </form>
+    </section>
+
+    <!-- ========== PANTRY ========== -->
+    <section id="view-pantry" class="view">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <h2 class="font-display text-5xl font-bold text-olive-deep">Pantry</h2>
+          <p style="color:var(--muted) text-xl">Add what you have — recipes will follow.</p>
+        </div>
+        <button id="clear-pantry-btn" class="btn-ghost text-sm text-terracotta border-terracotta/40">Clear all</button>
+      </div>
+
+      <form id="form-pantry" class="panel mb-6 grid sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+        <div class="lg:col-span-2">
+          <label class="block text-lg font-medium mb-1">Ingredient</label>
+          <input name="name" class="input-field" required placeholder="e.g. eggs" />
+        </div>
+        <div>
+          <label class="block text-lg font-medium mb-1">Quantity</label>
+          <input name="quantity" class="input-field" placeholder="2" />
+        </div>
+        <div>
+          <label class="block text-lg font-medium mb-1">Category</label>
+          <select name="category" class="input-field">
+            <option value="vegetables">Vegetables</option>
+            <option value="fruits">Fruits</option>
+            <option value="grains">Grains</option>
+            <option value="proteins">Proteins</option>
+            <option value="dairy">Dairy</option>
+            <option value="spices">Spices</option>
+            <option value="oils">Oils</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-accent w-full">Add</button>
+      </form>
+
+      <div id="pantry-list" class="flex flex-wrap gap-4 p-4 min-h-[150px]"></div>
+      <p id="pantry-empty" class="hidden mt-4" style="color:var(--muted)">Pantry is empty. Add ingredients above.</p>
+    </section>
+
+    <!-- ========== RECIPES ========== -->
+    <section id="view-recipes" class="view">
+      <div class="mb-6">
+        <h2 class="font-display text-5xl font-bold text-olive-deep">Smart Recipe Suggester</h2>
+        <p style="color:var(--muted) text-lg">Dishes matched to your pantry.</p>
+      </div>
+
+      <div class="panel mb-6 flex flex-wrap gap-3 items-end">
+        <div>
+          <label class="block text-sm font-medium mb-1">Region</label>
+          <select id="recipe-region" class="input-field w-40">
+            <option value="">All</option>
+            <option value="Kerala">Kerala</option>
+            <option value="South Indian">South Indian</option>
+            <option value="Indian">Indian</option>
+            <option value="North Indian">North Indian</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Min match %</label>
+          <select id="recipe-minmatch" class="input-field w-28">
+            <option value="20">20%</option>
+            <option value="40" selected>40%</option>
+            <option value="60">60%</option>
+            <option value="80">80%</option>
+          </select>
+        </div>
+        <button id="btn-suggest" class="btn-accent">Suggest from pantry</button>
+        <button id="btn-browse" class="btn-ghost">Browse all</button>
+      </div>
+
+      <div id="recipe-results" class="grid sm:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- Recipe detail modal -->
+    <div id="recipe-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
+      <div class="panel max-w-lg w-full max-h-[85vh] overflow-y-auto relative">
+        <button id="close-modal" class="absolute top-3 right-3 text-2xl leading-none text-olive-deep hover:text-terracotta">&times;</button>
+        <div id="recipe-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- ========== FOOD LOG ========== -->
+    <section id="view-foodlog" class="view">
+      <h2 class="font-display text-5xl font-bold text-olive-deep mb-2">Food Log &amp; Nutrition</h2>
+      <p class="mb-6" style="color:var(--muted) text-lg">Search foods (local Indian staples + optional USDA) and log meals.</p>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="panel space-y-4">
+          <h3 class="font-display font-bold text-lg">Lookup calories</h3>
+          <div class="flex gap-2">
+            <input id="food-search-q" class="input-field" placeholder="rice, dosa, chicken…" />
+            <input id="food-search-g" type="number" class="input-field w-24" value="100" title="grams" />
+            <button id="btn-food-search" class="btn-primary shrink-0">Search</button>
+          </div>
+          <div id="food-search-results" class="space-y-2 max-h-64 overflow-y-auto"></div>
+        </div>
+
+        <div class="panel space-y-4">
+          <h3 class="font-display font-bold text-lg">Log manually</h3>
+          <form id="form-foodlog" class="space-y-3">
+            <input name="foodName" class="input-field" required placeholder="Food name" />
+            <div class="grid grid-cols-2 gap-2">
+              <input name="servingSize" class="input-field" placeholder="Serving (e.g. 1 bowl)" />
+              <select name="mealType" class="input-field">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+              <input name="calories" type="number" class="input-field" required placeholder="kcal" />
+              <input name="carbs" type="number" step="0.1" class="input-field" placeholder="C" />
+              <input name="protein" type="number" step="0.1" class="input-field" placeholder="P" />
+              <input name="fat" type="number" step="0.1" class="input-field" placeholder="F" />
+            </div>
+            <button type="submit" class="btn-accent w-full">Add to log</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="panel mt-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h3 class="font-display font-bold text-lg">Today’s totals</h3>
+          <input type="date" id="foodlog-date" class="input-field w-auto" />
+        </div>
+        <div id="foodlog-totals" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 text-center"></div>
+        <div id="foodlog-list" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- ========== CALCULATOR ========== -->
+    <section id="view-calculator" class="view">
+      <h2 class="font-display text-5xl font-bold text-olive-deep mb-2">BMI &amp; TDEE Calculator</h2>
+      <p class="mb-6" style="color:var(--muted) text-lg">Estimate needs and get workout ideas based on your goal.</p>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <form id="form-calc" class="panel space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium mb-1">Weight (kg)</label>
+              <input name="weightKg" type="number" step="0.1" class="input-field" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Height (cm)</label>
+              <input name="heightCm" type="number" class="input-field" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Age</label>
+              <input name="age" type="number" class="input-field" required />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Gender</label>
+              <select name="gender" class="input-field">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Activity</label>
+              <select name="activityLevel" class="input-field">
+                <option value="sedentary">Sedentary</option>
+                <option value="light">Light</option>
+                <option value="moderate" selected>Moderate</option>
+                <option value="active">Active</option>
+                <option value="very_active">Very active</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Goal</label>
+              <select name="goal" class="input-field">
+                <option value="lose">Lose</option>
+                <option value="maintain" selected>Maintain</option>
+                <option value="gain">Gain</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary w-full">Calculate</button>
+        </form>
+
+        <div id="calc-results" class="panel space-y-4 hidden">
+          <div class="grid grid-cols-2 gap-3 text-center">
+            <div class="bg-olive-sage/50 rounded-lg p-3">
+              <p class="text-xs uppercase tracking-wide" style="color:var(--muted)">BMI</p>
+              <p id="calc-bmi" class="font-display text-3xl font-bold text-olive-deep">—</p>
+              <p id="calc-bmi-cat" class="text-sm text-ember font-semibold"></p>
+            </div>
+            <div class="bg-olive-sage/50 rounded-lg p-3">
+              <p class="text-xs uppercase tracking-wide" style="color:var(--muted)">TDEE</p>
+              <p id="calc-tdee" class="font-display text-3xl font-bold text-olive-deep">—</p>
+              <p class="text-sm" style="color:var(--muted)">kcal / day</p>
+            </div>
+          </div>
+          <div>
+            <p class="font-semibold mb-1">Target: <span id="calc-target" class="text-terracotta"></span> kcal</p>
+            <p class="text-sm mb-2" style="color:var(--muted)">Macros — P: <span id="calc-p"></span>g · C: <span id="calc-c"></span>g · F: <span id="calc-f"></span>g</p>
+            <div class="macro-bar mb-1"><span id="bar-p" style="width:0%;background:var(--olive)"></span></div>
+            <div class="macro-bar mb-1"><span id="bar-c" style="width:0%;background:var(--orange)"></span></div>
+            <div class="macro-bar"><span id="bar-f" style="width:0%;background:var(--terracotta)"></span></div>
+          </div>
+          <div>
+            <h4 class="font-display font-bold mb-2">Workout suggestions</h4>
+            <div id="calc-workouts" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PROGRESS ========== -->
+    <section id="view-progress" class="view">
+      <h2 class="font-display text-5xl font-bold text-olive-deep mb-2">Progress Tracking</h2>
+      <p class="mb-6" style="color:var(--muted) text-lg">Log weight and review nutrition trends.</p>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="panel">
+          <h3 class="font-display font-bold text-lg mb-3">Log weight</h3>
+          <form id="form-weight" class="flex flex-wrap gap-2 mb-4">
+            <input name="weightKg" type="number" step="0.1" class="input-field flex-1" required placeholder="kg" />
+            <input name="note" class="input-field flex-1" placeholder="Note (optional)" />
+            <button type="submit" class="btn-primary">Save</button>
+          </form>
+          <div id="weight-chart" class="progress-chart mb-2"></div>
+          <div id="weight-list" class="space-y-1 text-sm max-h-40 overflow-y-auto"></div>
+        </div>
+
+        <div class="panel">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-display font-bold text-lg">Nutrition summary</h3>
+            <select id="summary-days" class="input-field w-28">
+              <option value="7">7 days</option>
+              <option value="14">14 days</option>
+              <option value="30">30 days</option>
+            </select>
+          </div>
+          <div id="summary-averages" class="grid grid-cols-2 gap-2 mb-4"></div>
+          <div id="summary-daily" class="space-y-1 text-sm max-h-48 overflow-y-auto"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
